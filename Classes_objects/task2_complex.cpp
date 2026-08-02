@@ -1,13 +1,14 @@
+#include <cmath>
 #include <iostream>
 using namespace std;
 
-class ComplexNumbers {
+class ComplexNumber {
     double re, im;
 
    public:
-    ComplexNumbers(double re, double im) : re(re), im(im) {}
+    ComplexNumber(double re, double im) : re(re), im(im) {}
 
-    ~ComplexNumbers() {}
+    ~ComplexNumber() {}
 
     double getRe() { return re; }
 
@@ -17,31 +18,31 @@ class ComplexNumbers {
         cout << "Re = " << getRe() << " ; Im = " << getIm() << endl;
     }
 
-    ComplexNumbers operator+(const ComplexNumbers &other) const {
-        return ComplexNumbers(re + other.re, im + other.im);
+    ComplexNumber operator+(const ComplexNumber &other) const {
+        return ComplexNumber(re + other.re, im + other.im);
     }
 
-    ComplexNumbers operator-(const ComplexNumbers &other) const {
-        return ComplexNumbers(re - other.re, im - other.im);
+    ComplexNumber operator-(const ComplexNumber &other) const {
+        return ComplexNumber(re - other.re, im - other.im);
     }
 
-    ComplexNumbers operator*(const ComplexNumbers &other) const {
+    ComplexNumber operator*(const ComplexNumber &other) const {
         double reNew = re * other.re - im * other.im;
         double imNew = im * other.re + re * other.im;
-        return ComplexNumbers(reNew, imNew);
+        return ComplexNumber(reNew, imNew);
     }
 
-    void operator+=(const ComplexNumbers &other) {
+    void operator+=(const ComplexNumber &other) {
         re += other.re;
         im += other.im;
     }
 
-    void operator-=(const ComplexNumbers &other) {
+    void operator-=(const ComplexNumber &other) {
         re -= other.re;
         im -= other.im;
     }
 
-    void operator*=(const ComplexNumbers &other) {
+    void operator*=(const ComplexNumber &other) {
         double reNew = re * other.re - im * other.im;
         double imNew = im * other.re + re * other.im;
         re = reNew;
@@ -49,12 +50,37 @@ class ComplexNumbers {
     }
 };
 
+const ComplexNumber I(0, 1);
+
+class ComplexNumerTrig : public ComplexNumber {
+    double phi;
+
+   public:
+    ComplexNumerTrig(double re, double im) : ComplexNumber(re, im) {
+        phi = atan2(im, re);
+    }
+
+    double getPhi() {
+        return phi;
+    }
+
+    double getAbsValue() {
+        double re = getRe();
+        double im = getIm();
+        return sqrt(re * re + im * im);
+    }
+};
+
 int main() {
-    ComplexNumbers a(1, 2), b(3, 5);
-    ComplexNumbers sum = a + b;
-    ComplexNumbers prod = a * b;
+    ComplexNumber a(1, 2), b(3, 5);
+    ComplexNumber sum = a + b;
+    ComplexNumber prod = a * b;
     cout << "sum : ";
     sum.show();
     cout << "product : ";
     prod.show();
+
+    ComplexNumerTrig c(3, 4);
+    cout << "Модуль c : " << c.getAbsValue() << endl;
+    cout << "Аргумент c (в радианах): " << c.getPhi() << endl;
 }
